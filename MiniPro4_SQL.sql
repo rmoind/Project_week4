@@ -38,8 +38,11 @@ CREATE TABLE traveler(
     FOREIGN KEY (transportation_type_id) REFERENCES transportation(transportation_type_id), 
     accommodation_type_id INT,
     FOREIGN KEY (accommodation_type_id) REFERENCES accommodation(accommodation_type_id));
-    
-    
+  
+  
+ #4. Traveler nationality influences destination preferences
+ # Goal: Cross-tabulation of traveler nationality vs. top destinations.   
+ 
 WITH Nationality_Destination_Counts AS (
     SELECT
         T.nationality,
@@ -47,7 +50,6 @@ WITH Nationality_Destination_Counts AS (
         COUNT(TF.`destination_id`) AS Trip_Count,
         ROW_NUMBER() OVER (PARTITION BY T.nationality ORDER BY COUNT(TF.`destination_id`) DESC) AS rn
     FROM
-        -- *** REPLACE tdf_final HERE ***
         destination AS TF
     JOIN
         traveler AS T ON TF.destination_id = T.traveler_id
